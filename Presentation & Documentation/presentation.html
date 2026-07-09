@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Global Air Quality - Graduation Presentation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --primary: #1a1a2e; --secondary: #16213e; --accent: #0f3460; --highlight: #e94560; --text: #333; --text-light: #555; --text-muted: #888; --bg: #f5f5f5; --card: #ffffff; --border: #ddd; --success: #27ae60; --warning: #f39c12; --danger: #e74c3c; --info: #2980b9; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+.slide { background: var(--card); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 30px; padding: 40px 48px; min-height: 620px; page-break-after: always; position: relative; }
+.slide::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--highlight), var(--accent)); }
+.slide-num { position: absolute; bottom: 16px; right: 24px; font-size: 11px; color: var(--text-muted); }
+h1 { font-size: 38px; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+h2 { font-size: 26px; font-weight: 600; color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid var(--highlight); display: inline-block; }
+h3 { font-size: 17px; font-weight: 600; color: var(--secondary); margin-bottom: 8px; }
+p { font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 10px; }
+ul { padding-left: 20px; margin-bottom: 14px; }
+li { font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 5px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 20px 0; }
+.kpi-card { background: #fafafa; border: 1px solid var(--border); border-radius: 10px; padding: 20px 12px; text-align: center; }
+.kpi-val { font-size: 32px; font-weight: 700; color: var(--highlight); line-height: 1; margin-bottom: 6px; }
+.kpi-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.info-box { background: #f0f7ff; border-left: 4px solid var(--info); padding: 16px; border-radius: 0 10px 10px 0; margin: 14px 0; }
+.warn-box { background: #fff9f0; border-left: 4px solid var(--warning); padding: 16px; border-radius: 0 10px 10px 0; margin: 14px 0; }
+.ok-box { background: #f0fff4; border-left: 4px solid var(--success); padding: 16px; border-radius: 0 10px 10px 0; margin: 14px 0; }
+.pink-box { background: #fff0f3; border-left: 4px solid var(--highlight); padding: 16px; border-radius: 0 10px 10px 0; margin: 14px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 14px 0; }
+th { background: var(--primary); color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text-light); }
+.best { background: #e8f5e9; }
+.best td { color: var(--primary); font-weight: 600; }
+.sel { background: #e3f2fd; }
+.sel td { color: var(--info); font-weight: 600; }
+.tag { display: inline-block; padding: 3px 10px; border-radius: 16px; font-size: 11px; font-weight: 600; margin: 2px; }
+.t-blue { background: #e3f2fd; color: #1565c0; }
+.t-green { background: #e8f5e9; color: #2e7d32; }
+.t-orange { background: #fff3e0; color: #e65100; }
+.t-purple { background: #f3e5f5; color: #6a1b9a; }
+.t-red { background: #ffebee; color: #c62828; }
+.notes { background: #f0f0f0; border-radius: 8px; padding: 14px 18px; margin-top: 20px; border-left: 3px solid #aaa; }
+.notes h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 6px; }
+.notes p { font-size: 12px; color: #666; margin: 0; font-style: italic; }
+.center { text-align: center; padding: 60px 30px; }
+.divider { width: 70px; height: 3px; background: var(--highlight); margin: 0 auto 40px; }
+.code { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 12px; line-height: 1.6; overflow-x: auto; }
+@media print { .slide { page-break-after: always; box-shadow: none; margin: 0; border-radius: 0; } body { background: white; } .notes { display: none; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1: Title -->
+<div class="slide center">
+<div style="font-size: 11px; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 28px;">Graduation Project &middot; S4 Cohort &middot; July 2026</div>
+<h1 style="font-size: 48px; margin-bottom: 14px;">Global Air Quality</h1>
+<div style="font-size: 20px; color: #666; font-weight: 400; margin-bottom: 40px;">Monitoring, Analyzing & Forecasting Air Quality Across the Globe</div>
+<div class="divider"></div>
+<div class="kpi-grid" style="max-width: 700px; margin: 0 auto;">
+<div class="kpi-card"><div class="kpi-val">238</div><div class="kpi-lbl">Cities</div></div>
+<div class="kpi-card"><div class="kpi-val">46</div><div class="kpi-lbl">Countries</div></div>
+<div class="kpi-card"><div class="kpi-val">21K+</div><div class="kpi-lbl">Fact Records</div></div>
+<div class="kpi-card"><div class="kpi-val">92</div><div class="kpi-lbl">Days (Q4 2023)</div></div>
+</div>
+<div style="margin-top: 40px; font-size: 13px; color: #888;">
+<div style="margin-bottom: 8px;"><strong>Team:</strong> Mohamed Kamel &middot; Omar Fathy &middot; Hasnaa Mohamed &middot; Marwan Emad &middot; Moustafa Khaled</div>
+<div><strong>Supervisor:</strong> Engineer Mohamed El Emam &middot; Program: GIZ4_DAT1_S4</div>
+</div>
+<div class="slide-num">1 / 24</div>
+</div>
+
+<!-- SLIDE 2: Overview -->
+<div class="slide">
+<h2>Project Overview</h2>
+<div class="two-col">
+<div>
+<h3>What is this project?</h3>
+<p>An end-to-end data analytics pipeline transforming raw air quality observations into a governed, decision-ready Power BI dashboard branded <strong>"AeroScan."</strong></p>
+<h3>Four Complementary Domains</h3>
+<ul>
+<li><strong>Data Engineering:</strong> Bronze/Silver/Gold Medallion pipeline</li>
+<li><strong>Dimensional Modeling:</strong> Star schema with fact & dimension tables</li>
+<li><strong>Dashboard:</strong> Six-page interactive Power BI experience</li>
+<li><strong>Machine Learning:</strong> AQI prediction with 88.5% R&sup2;</li>
+</ul>
+</div>
+<div>
+<div style="background: #fafafa; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">
+<h3 style="text-align: center; margin-bottom: 16px;">Key Deliverables</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+<div style="text-align: center; padding: 14px;"><div style="font-size: 28px; font-weight: 700; color: var(--info);">3</div><div style="font-size: 12px; color: #888;">Pipeline Layers</div></div>
+<div style="text-align: center; padding: 14px;"><div style="font-size: 28px; font-weight: 700; color: var(--success);">3</div><div style="font-size: 12px; color: #888;">Star Schema Tables</div></div>
+<div style="text-align: center; padding: 14px;"><div style="font-size: 28px; font-weight: 700; color: var(--warning);">6</div><div style="font-size: 12px; color: #888;">Dashboard Pages</div></div>
+<div style="text-align: center; padding: 14px;"><div style="font-size: 28px; font-weight: 700; color: var(--highlight);">1</div><div style="font-size: 12px; color: #888;">ML Prediction Model</div></div>
+</div>
+</div>
+<div class="info-box" style="margin-top: 14px;">
+<p style="margin:0;"><strong>Dataset:</strong> WAQI Q4 2023 archive — 238 cities, 46 countries, 92 days, 21,238 fact records after cleaning.</p>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Welcome the audience. Emphasize this is a complete analytics pipeline — not just a dashboard. It includes data engineering, dimensional modeling, visualization, and machine learning.</p></div>
+<div class="slide-num">2 / 24</div>
+</div>
+
+<!-- SLIDE 3: Problem Statement -->
+<div class="slide">
+<h2>Problem Statement</h2>
+<div class="two-col">
+<div>
+<div class="warn-box">
+<h3>The Challenge</h3>
+<p style="margin:0;">Raw air quality feeds are long-format, per-species logs with inconsistent casing, mixed units, duplicates, and physically implausible values.</p>
+</div>
+<h3>Three Failure Modes</h3>
+<ul>
+<li><strong>Double-counting</strong> from unresolved duplicate rows</li>
+<li><strong>Distorted averages</strong> from unvalidated outliers</li>
+<li><strong>Incomparable scales</strong> across pollutant species</li>
+</ul>
+</div>
+<div>
+<div style="background: linear-gradient(135deg, #fff0f3 0%, #fff 100%); border: 1px solid var(--highlight); border-radius: 10px; padding: 20px;">
+<h3 style="color: var(--highlight);">Real-World Impact</h3>
+<p>Without disciplined transformation, downstream analysis risks misleading conclusions affecting:</p>
+<ul>
+<li>Public health policy decisions</li>
+<li>Environmental research validity</li>
+<li>Urban planning and regulation</li>
+<li>Individual health awareness</li>
+</ul>
+</div>
+<div class="info-box" style="margin-top: 14px;">
+<p style="margin:0;"><strong>Example:</strong> Min reading exceeding max, or negative pollutant concentrations — both physically impossible.</p>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Set the stage explaining why raw data cannot be trusted. The three failure modes provide a framework. WAQI data is valuable but needs significant preprocessing.</p></div>
+<div class="slide-num">3 / 24</div>
+</div>
+
+<!-- SLIDE 4: Proposed Solution -->
+<div class="slide">
+<h2>Proposed Solution</h2>
+<p style="margin-bottom: 20px;">A three-stage Medallion pipeline ensuring every transformation is traceable and data quality is enforced centrally.</p>
+<div style="padding: 20px; border: 2px solid #cd7f32; border-radius: 10px; background: linear-gradient(135deg, #fdf6ed 0%, #fff 100%); margin-bottom: 12px;">
+<div style="font-size: 12px; font-weight: 700; color: #cd7f32; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Bronze Layer</div>
+<h3 style="font-size: 16px;">Raw Ingestion</h3>
+<p style="margin:0;">Preserves untouched, auditable source data. No transformations — only ingestion metadata for traceability.</p>
+</div>
+<div style="text-align: center; font-size: 22px; color: #888; margin: 8px 0;">&darr;</div>
+<div style="padding: 20px; border: 2px solid #aaa; border-radius: 10px; background: linear-gradient(135deg, #f5f5f5 0%, #fff 100%); margin-bottom: 12px;">
+<div style="font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Silver Layer</div>
+<h3 style="font-size: 16px;">Cleaning & Feature Engineering</h3>
+<p style="margin:0;">Standardizes units, removes invalids, calculates composite AQI, enriches with time-intelligence attributes.</p>
+</div>
+<div style="text-align: center; font-size: 22px; color: #888; margin: 8px 0;">&darr;</div>
+<div style="padding: 20px; border: 2px solid #c9a000; border-radius: 10px; background: linear-gradient(135deg, #fffdf0 0%, #fff 100%); margin-bottom: 12px;">
+<div style="font-size: 12px; font-weight: 700; color: #c9a000; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Gold Layer</div>
+<h3 style="font-size: 16px;">Star Schema & Dashboard</h3>
+<p style="margin:0;">Restructures into star schema for fast Power BI querying. Surrogate keys minimize joins.</p>
+</div>
+<div class="ok-box" style="margin-top: 14px;">
+<p style="margin:0;"><strong>Why Medallion?</strong> Every transformation is traceable. Quality rules enforced once, centrally. Dashboard reflects a governed, reproducible dataset.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Walk through each layer. Bronze = system of record. Silver = where the hard work happens. Gold = the product consumers see. Medallion is an industry standard.</p></div>
+<div class="slide-num">4 / 24</div>
+</div>
+
+<!-- SLIDE 5: Business Value -->
+<div class="slide">
+<h2>Business Value & Impact</h2>
+<div class="three-col">
+<div style="text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 40px; margin-bottom: 10px;">&#127758;</div>
+<h3>Global Visibility</h3>
+<p style="font-size: 13px;">Compare air quality across 238 cities in 46 countries on a unified scale.</p>
+</div>
+<div style="text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 40px; margin-bottom: 10px;">&#128202;</div>
+<h3>Data-Driven Decisions</h3>
+<p style="font-size: 13px;">Enable policymakers to identify pollution hotspots and seasonal trends.</p>
+</div>
+<div style="text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 40px; margin-bottom: 10px;">&#128302;</div>
+<h3>Predictive Capability</h3>
+<p style="font-size: 13px;">ML model predicts AQI from weather with 88.5% accuracy (R&sup2;).</p>
+</div>
+</div>
+<h3 style="margin-top: 28px;">Stakeholders</h3>
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+<div style="text-align: center; padding: 16px; background: #f8f9fa; border-radius: 8px;"><div style="font-size: 28px; margin-bottom: 6px;">&#128300;</div><div style="font-weight: 600; font-size: 13px;">Researchers</div><div style="font-size: 11px; color: #888;">Academic analysis</div></div>
+<div style="text-align: center; padding: 16px; background: #f8f9fa; border-radius: 8px;"><div style="font-size: 28px; margin-bottom: 6px;">&#127963;</div><div style="font-weight: 600; font-size: 13px;">Policymakers</div><div style="font-size: 11px; color: #888;">Regulatory planning</div></div>
+<div style="text-align: center; padding: 16px; background: #f8f9fa; border-radius: 8px;"><div style="font-size: 28px; margin-bottom: 6px;">&#127973;</div><div style="font-weight: 600; font-size: 13px;">Public Health</div><div style="font-size: 11px; color: #888;">Risk assessment</div></div>
+<div style="text-align: center; padding: 16px; background: #f8f9fa; border-radius: 8px;"><div style="font-size: 28px; margin-bottom: 6px;">&#128101;</div><div style="font-weight: 600; font-size: 13px;">General Public</div><div style="font-size: 11px; color: #888;">Awareness & safety</div></div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Connect technical work to real-world impact. Ask "Who cares about air quality data?" then answer with stakeholders. The predictive capability moves from descriptive to predictive analytics.</p></div>
+<div class="slide-num">5 / 24</div>
+</div>
+
+<!-- SLIDE 6: Dataset -->
+<div class="slide">
+<h2>Dataset Overview</h2>
+<div class="two-col">
+<div>
+<h3>Source: WAQI Project</h3>
+<p>The WAQI COVID-19 Air Quality Data Archive aggregates observations from thousands of government and research monitoring stations worldwide.</p>
+<div class="info-box">
+<div style="font-size: 12px; color: #888; margin-bottom: 4px;">Coverage Period</div>
+<div style="font-size: 16px; font-weight: 600; color: var(--primary);">1 Oct — 31 Dec 2023 (92 days)</div>
+</div>
+<h3>Raw Format Challenge</h3>
+<p>Long-format CSV: one row per city, date, and species. Each record includes summary statistics (min, max, median, variance, count).</p>
+</div>
+<div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+<div class="kpi-card"><div class="kpi-val" style="color: var(--info);">46</div><div class="kpi-lbl">Countries</div></div>
+<div class="kpi-card"><div class="kpi-val" style="color: var(--success);">238</div><div class="kpi-lbl">Cities</div></div>
+<div class="kpi-card"><div class="kpi-val" style="color: var(--warning);">21,238</div><div class="kpi-lbl">Fact Records</div></div>
+<div class="kpi-card"><div class="kpi-val" style="color: var(--highlight);">10</div><div class="kpi-lbl">Measures</div></div>
+</div>
+<div style="margin-top: 14px; padding: 14px; background: #f8f9fa; border-radius: 8px;">
+<div style="font-size: 12px; color: #888; margin-bottom: 6px;">Key Measures</div>
+<div style="display: flex; flex-wrap: wrap; gap: 5px;">
+<span class="tag t-blue">Temperature</span><span class="tag t-blue">Pressure</span><span class="tag t-blue">Humidity</span>
+<span class="tag t-blue">Dew</span><span class="tag t-blue">Wind Gust</span><span class="tag t-blue">UVI</span>
+<span class="tag t-green">PM2.5</span><span class="tag t-green">PM10</span><span class="tag t-green">NO2</span><span class="tag t-green">SO2/O3</span>
+</div>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Explain dataset scale. 21,238 fact records came from much larger raw data. The long-format challenge is important — each city/date has multiple rows that must be pivoted to wide format.</p></div>
+<div class="slide-num">6 / 24</div>
+</div>
+
+<!-- SLIDE 7: Medallion Architecture -->
+<div class="slide">
+<h2>Medallion Architecture Overview</h2>
+<p style="margin-bottom: 20px;">Three-layer pattern: raw ingestion &rarr; cleaning & validation &rarr; analytics-ready modeling.</p>
+<div style="display: flex; align-items: stretch; gap: 16px;">
+<div style="flex: 1; padding: 20px; border-radius: 10px; border: 2px solid #cd7f32; background: linear-gradient(135deg, #fdf6ed 0%, #fff 100%);">
+<div style="font-size: 11px; font-weight: 700; color: #cd7f32; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Bronze</div>
+<h3 style="font-size: 16px;">Raw Ingestion</h3>
+<ul style="font-size: 13px;"><li>Load raw WAQI CSV</li><li>Preserve original structure</li><li>Add ingestion metadata</li><li>Schema-on-read</li></ul>
+</div>
+<div style="display: flex; align-items: center; color: #888; font-size: 24px;">&rarr;</div>
+<div style="flex: 1; padding: 20px; border-radius: 10px; border: 2px solid #aaa; background: linear-gradient(135deg, #f5f5f5 0%, #fff 100%);">
+<div style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Silver</div>
+<h3 style="font-size: 16px;">Cleaned & Transformed</h3>
+<ul style="font-size: 13px;"><li>Remove duplicates & invalids</li><li>Standardize units & names</li><li>Calculate composite AQI</li><li>Time-intelligence enrichment</li></ul>
+</div>
+<div style="display: flex; align-items: center; color: #888; font-size: 24px;">&rarr;</div>
+<div style="flex: 1; padding: 20px; border-radius: 10px; border: 2px solid #c9a000; background: linear-gradient(135deg, #fffdf0 0%, #fff 100%);">
+<div style="font-size: 11px; font-weight: 700; color: #c9a000; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Gold</div>
+<h3 style="font-size: 16px;">Star Schema</h3>
+<ul style="font-size: 13px;"><li>Fact & dimension tables</li><li>Surrogate keys</li><li>Optimized for Power BI</li><li>Query-ready</li></ul>
+</div>
+</div>
+<div class="ok-box" style="margin-top: 20px;">
+<p style="margin:0;"><strong>Why Medallion?</strong> Every transformation is traceable. Quality rules enforced once, centrally. The dashboard reflects a governed, reproducible dataset.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>This is a core architectural decision. Medallion is industry-standard. Key benefit: separation of concerns — each layer has one job.</p></div>
+<div class="slide-num">7 / 24</div>
+</div>
+
+<!-- SLIDE 8: Bronze Layer -->
+<div class="slide">
+<h2>Bronze Layer — Raw Ingestion</h2>
+<div class="two-col">
+<div>
+<h3>Purpose</h3>
+<p>Preserves an untouched, auditable copy of WAQI source data. No transformations — only metadata tagging.</p>
+<h3>Key Operations</h3>
+<ul>
+<li>Load raw CSV with all columns as strings</li>
+<li>Append ingestion timestamp in UTC</li>
+<li>Tag with source filename</li>
+<li>Print execution summary</li>
+</ul>
+<div class="info-box" style="margin-top: 14px;">
+<p style="margin:0;"><strong>Philosophy:</strong> Bronze is the "system of record." Trace back and re-run deterministically if needed.</p>
+</div>
+</div>
+<div>
+<div class="code">
+<div style="color: #6a9955;"># Bronze Layer — Raw Ingestion</div>
+<div style="margin-top: 6px;"><span style="color: #569cd6;">def</span> <span style="color: #dcdcaa;">load_raw_data</span>(filepath):</div>
+<div style="padding-left: 16px;">df = pd.read_csv(filepath,</div>
+<div style="padding-left: 32px;">dtype=str,</div>
+<div style="padding-left: 32px;">keep_default_na=False)</div>
+<div style="padding-left: 16px;"><span style="color: #c586c0;">return</span> df</div>
+<div style="margin-top: 8px; color: #6a9955;"># Add audit metadata</div>
+<div>df[<span style="color: #ce9178;">"ingestion_date"</span>] = datetime.utcnow()</div>
+<div>df[<span style="color: #ce9178;">"source_file"</span>] = filename</div>
+</div>
+<div style="margin-top: 14px; padding: 14px; background: #f8f9fa; border-radius: 8px;">
+<h3 style="font-size: 13px;">Audit Trail</h3>
+<div style="font-family: monospace; font-size: 11px; color: #666; line-height: 1.7; margin-top: 6px;">
+<div>ingestion_date: 2023-10-01 00:00:00 UTC</div>
+<div>source_file: waqi_q4_2023.csv</div>
+<div>total_records: ~45,000</div>
+<div>total_columns: 12</div>
+</div>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Show code briefly. Loading as strings prevents type coercion errors. Audit trail is critical for data governance.</p></div>
+<div class="slide-num">8 / 24</div>
+</div>
+
+<!-- SLIDE 9: Silver Layer -->
+<div class="slide">
+<h2>Silver Layer — Cleaning & Transformation</h2>
+<p style="margin-bottom: 16px;">The most substantial pipeline stage. Structured cleaning, validation, and feature engineering.</p>
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+<div style="padding: 16px; border: 1px solid #ddd; border-radius: 10px;">
+<h3>Standardization</h3>
+<ul style="font-size: 13px;"><li>Column names &rarr; snake_case</li><li>Country codes &rarr; uppercase</li><li>City names &rarr; title case</li><li>Species names &rarr; lowercase</li><li>Unify wind-gust variants</li></ul>
+</div>
+<div style="padding: 16px; border: 1px solid #ddd; border-radius: 10px;">
+<h3>Validation Rules</h3>
+<ul style="font-size: 13px;"><li>Drop rows where min &gt; max</li><li>Remove negative readings</li><li>Discard count &lt; 1</li><li>Enforce Q4 2023 date range</li></ul>
+</div>
+<div style="padding: 16px; border: 1px solid #ddd; border-radius: 10px;">
+<h3>Feature Engineering</h3>
+<ul style="font-size: 13px;"><li>Pivot long &rarr; wide format</li><li>Forward/backward fill gaps</li><li>Calculate composite AQI</li><li>Classify: Safe/Polluted/Hazardous</li></ul>
+</div>
+<div style="padding: 16px; border: 1px solid #ddd; border-radius: 10px;">
+<h3>Time Intelligence</h3>
+<ul style="font-size: 13px;"><li>is_weekday flag (0/1)</li><li>Month name extraction</li><li>Season classification</li><li>Day/week of year</li></ul>
+</div>
+</div>
+<div class="pink-box" style="margin-top: 14px;">
+<p style="margin:0;"><strong>AQI Formula:</strong> Mean of four normalized sub-indices — PM2.5/15, PM10/45, NO2/25, SO2/40, O3/100. Thresholds: &le;1.0 Safe, 1.0&ndash;2.0 Polluted, &ge;2.0 Hazardous.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Silver layer is where the magic happens. Highlight wind-gust unification as a real data quality issue. AQI formula is a composite index, not one pollutant.</p></div>
+<div class="slide-num">9 / 24</div>
+</div>
+
+<!-- SLIDE 10: Gold Layer -->
+<div class="slide">
+<h2>Gold Layer — Star Schema Build</h2>
+<p style="margin-bottom: 16px;">Restructures cleaned data into a star schema optimized for fast Power BI querying.</p>
+<div style="display: flex; gap: 16px; align-items: flex-start;">
+<div style="flex: 1; padding: 18px; border: 2px solid var(--info); border-radius: 10px; background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);">
+<h3 style="color: var(--info); font-size: 15px;">dim_location</h3>
+<div style="font-size: 12px; color: #555; line-height: 1.7;">
+<div><strong>PK:</strong> location_key</div>
+<div><strong>Cols:</strong> country, city</div>
+<div><strong>Rows:</strong> 238 cities</div>
+<div><strong>Countries:</strong> 46</div>
+</div>
+</div>
+<div style="flex: 1; padding: 18px; border: 2px solid var(--success); border-radius: 10px; background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%);">
+<h3 style="color: var(--success); font-size: 15px;">dim_date</h3>
+<div style="font-size: 12px; color: #555; line-height: 1.7;">
+<div><strong>PK:</strong> date</div>
+<div><strong>Cols:</strong> year, month, day, is_weekday, season</div>
+<div><strong>Rows:</strong> 92 dates</div>
+<div><strong>Seasons:</strong> Autumn, Winter</div>
+</div>
+</div>
+<div style="flex: 2; padding: 18px; border: 2px solid var(--warning); border-radius: 10px; background: linear-gradient(135deg, #fff8e1 0%, #fff 100%);">
+<h3 style="color: #e65100; font-size: 15px;">fact_airquality_weather</h3>
+<div style="font-size: 12px; color: #555; line-height: 1.7;">
+<div><strong>PK:</strong> fact_key</div>
+<div><strong>FKs:</strong> date &rarr; dim_date, location_key &rarr; dim_location</div>
+<div><strong>Measures:</strong> temp, pressure, humidity, dew, precip, wind gust, uvi</div>
+<div><strong>AQI:</strong> value, label, sort_order</div>
+<div><strong>Rows:</strong> 21,238</div>
+</div>
+</div>
+</div>
+<div style="margin-top: 18px; padding: 16px; background: #f8f9fa; border-radius: 10px;">
+<h3 style="font-size: 15px;">Why Star Schema?</h3>
+<div class="two-col" style="margin-top: 10px;">
+<div><ul style="font-size: 13px;"><li>Minimizes joins per visual</li><li>Keeps DAX measures simple</li><li>Optimized for VertiPaq engine</li></ul></div>
+<div><ul style="font-size: 13px;"><li>Wide fact, small dimensions</li><li>Surrogate keys prevent issues</li><li>Industry best practice</li></ul></div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Gold layer is the product consumers see. Explain surrogate keys — city names can change or have duplicates. Star schema is designed for Power BI's columnar storage.</p></div>
+<div class="slide-num">10 / 24</div>
+</div>
+
+<!-- SLIDE 11: Data Quality -->
+<div class="slide">
+<h2>Data Quality Summary</h2>
+<div class="kpi-grid">
+<div class="kpi-card"><div class="kpi-val" style="color: var(--info);">21,238</div><div class="kpi-lbl">Total fact rows</div></div>
+<div class="kpi-card"><div class="kpi-val" style="color: var(--success);">91.9%</div><div class="kpi-lbl">Valid AQI rows</div></div>
+<div class="kpi-card"><div class="kpi-val" style="color: var(--warning);">94.8%</div><div class="kpi-lbl">Valid UVI rows</div></div>
+<div class="kpi-card"><div class="kpi-val" style="color: var(--highlight);">0</div><div class="kpi-lbl">Duplicate rows</div></div>
+</div>
+<table style="margin-top: 16px;">
+<thead><tr><th>Quality Metric</th><th>Value</th><th>Status</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Duplicate rows removed</td><td>Handled</td><td><span class="tag t-green">Pass</span></td><td>Silver drop_duplicates()</td></tr>
+<tr><td>Invalid records removed</td><td>Handled</td><td><span class="tag t-green">Pass</span></td><td>Min&gt;max, negatives, bad variance</td></tr>
+<tr><td>Date range enforced</td><td>1 Oct &ndash; 31 Dec 2023</td><td><span class="tag t-green">Pass</span></td><td>Out-of-range excluded</td></tr>
+<tr><td>Unknown AQI labels</td><td>1,720 (8.1%)</td><td><span class="tag t-orange">Info</span></td><td>Missing pollutant species</td></tr>
+<tr><td>Missing UVI readings</td><td>1,107 (5.2%)</td><td><span class="tag t-orange">Info</span></td><td>No UVI for city/date</td></tr>
+</tbody>
+</table>
+<div class="info-box" style="margin-top: 14px;">
+<p style="margin:0;"><strong>Note:</strong> 8.1% "Unknown" reflects incomplete pollutant species. Retained for weather analysis but excluded from AQI rankings.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Data quality is about documenting what was removed and why. 8.1% Unknown is transparency, not failure. These records still have valid weather data.</p></div>
+<div class="slide-num">11 / 24</div>
+</div>
+
+<!-- SLIDE 12: AI Model Overview -->
+<div class="slide">
+<h2>AI Model Overview</h2>
+<div class="two-col">
+<div>
+<h3>Objective</h3>
+<p>Predict AQI using weather conditions and temporal features. Enables forecasting and anomaly detection.</p>
+<h3>Model Pipeline</h3>
+<ul>
+<li>Load Silver-layer data (21,238 &times; 18)</li>
+<li>Feature engineering & encoding</li>
+<li>Train-test split (80/20)</li>
+<li>Algorithm comparison (8 models)</li>
+<li>Hyperparameter tuning (RandomizedSearchCV)</li>
+<li>Final evaluation & SHAP explainability</li>
+</ul>
+</div>
+<div>
+<div style="padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<h3>Input Features (15)</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px;">
+<span class="tag t-blue">country</span><span class="tag t-blue">city</span>
+<span class="tag t-green">temperature</span><span class="tag t-green">pressure</span><span class="tag t-green">humidity</span>
+<span class="tag t-green">dew</span><span class="tag t-green">wind gust</span><span class="tag t-green">uvi</span><span class="tag t-green">precipitation</span>
+<span class="tag t-purple">is_weekday</span><span class="tag t-purple">season</span><span class="tag t-purple">day_of_year</span>
+<span class="tag t-purple">week_of_year</span><span class="tag t-purple">month</span><span class="tag t-purple">day_of_week</span>
+</div>
+<div style="margin-top: 14px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+<div style="font-size: 12px; color: #888;">Target Variable</div>
+<div style="font-size: 16px; font-weight: 600; color: var(--primary);">AQI (continuous)</div>
+</div>
+</div>
+<div style="margin-top: 14px; padding: 14px; background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%); border-radius: 8px; border-left: 3px solid var(--success);">
+<div style="font-size: 12px; color: #888;">Final Model</div>
+<div style="font-size: 18px; font-weight: 700; color: var(--success);">LightGBM (Tuned)</div>
+<div style="font-size: 12px; color: #666; margin-top: 3px;">Best CV R&sup2; = 0.8770</div>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>ML adds predictive power. We don't just describe historical air quality — we predict it. 15 features include weather and temporal data. LightGBM selected after comparing 8 algorithms.</p></div>
+<div class="slide-num">12 / 24</div>
+</div>
+
+<!-- SLIDE 13: Training Process -->
+<div class="slide">
+<h2>Model Training Process</h2>
+<div style="display: flex; flex-direction: column; gap: 10px;">
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--info); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">1</div>
+<div><div style="font-weight: 600; color: var(--primary);">Data Loading</div><div style="font-size: 13px; color: #666;">21,238 rows &times; 18 columns from silver_layer.csv</div></div>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--info); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">2</div>
+<div><div style="font-weight: 600; color: var(--primary);">Preprocessing</div><div style="font-size: 13px; color: #666;">Drop 1,720 rows with missing AQI &middot; Fill UVI NaN with median (5.0) &middot; Encode categoricals</div></div>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--info); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">3</div>
+<div><div style="font-weight: 600; color: var(--primary);">Train-Test Split</div><div style="font-size: 13px; color: #666;">Train: 15,614 rows &middot; Test: 3,904 rows (80/20)</div></div>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--warning); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">4</div>
+<div><div style="font-weight: 600; color: var(--primary);">Algorithm Comparison (8 Models)</div><div style="font-size: 13px; color: #666;">Linear Reg, Ridge, Lasso, Decision Tree, Random Forest, XGBoost, LightGBM, CatBoost</div></div>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--success); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">5</div>
+<div><div style="font-weight: 600; color: var(--primary);">Hyperparameter Tuning</div><div style="font-size: 13px; color: #666;">RandomizedSearchCV on LightGBM &middot; 5 folds &times; 30 candidates = 150 fits &middot; Best CV R&sup2; = 0.8770</div></div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Walk through each step. Dropping rows with missing AQI is critical. Encoding shows categorical complexity (225 unique cities!). 150 fits show thoroughness.</p></div>
+<div class="slide-num">13 / 24</div>
+</div>
+
+<!-- SLIDE 14: Model Comparison -->
+<div class="slide">
+<h2>Model Comparison Results</h2>
+<p style="margin-bottom: 14px;">Eight algorithms evaluated. Tree-based ensembles significantly outperformed linear models.</p>
+<table>
+<thead><tr><th>Algorithm</th><th style="text-align:right;">MAE &darr;</th><th style="text-align:right;">RMSE &darr;</th><th style="text-align:right;">R&sup2; &uarr;</th><th style="text-align:right;">CV-R&sup2; &uarr;</th></tr></thead>
+<tbody>
+<tr><td>Linear Regression</td><td style="text-align:right;">0.7020</td><td style="text-align:right;">1.1239</td><td style="text-align:right;">0.1696</td><td style="text-align:right;">0.1678</td></tr>
+<tr><td>Ridge</td><td style="text-align:right;">0.7020</td><td style="text-align:right;">1.1239</td><td style="text-align:right;">0.1696</td><td style="text-align:right;">0.1678</td></tr>
+<tr><td>Lasso</td><td style="text-align:right;">0.6963</td><td style="text-align:right;">1.1227</td><td style="text-align:right;">0.1714</td><td style="text-align:right;">0.1666</td></tr>
+<tr><td>Decision Tree</td><td style="text-align:right;">0.3200</td><td style="text-align:right;">0.6634</td><td style="text-align:right;">0.7107</td><td style="text-align:right;">0.7478</td></tr>
+<tr class="best"><td>Random Forest &star;</td><td style="text-align:right;">0.2424</td><td style="text-align:right;">0.4489</td><td style="text-align:right;">0.8675</td><td style="text-align:right;">0.8665</td></tr>
+<tr><td>XGBoost</td><td style="text-align:right;">0.2555</td><td style="text-align:right;">0.4623</td><td style="text-align:right;">0.8595</td><td style="text-align:right;">0.8610</td></tr>
+<tr class="sel"><td style="font-weight:700;">LightGBM &trophy; (Selected)</td><td style="text-align:right; font-weight:700;">0.2672</td><td style="text-align:right; font-weight:700;">0.4569</td><td style="text-align:right; font-weight:700;">0.8628</td><td style="text-align:right; font-weight:700;">0.8554</td></tr>
+<tr><td>CatBoost</td><td style="text-align:right;">0.2834</td><td style="text-align:right;">0.4656</td><td style="text-align:right;">0.8575</td><td style="text-align:right;">0.8548</td></tr>
+</tbody>
+</table>
+<div class="info-box" style="margin-top: 14px;">
+<p style="margin:0;"><strong>Selection Rationale:</strong> LightGBM selected for tuning despite Random Forest's slightly higher R&sup2; because gradient boosting typically achieves better generalization after hyperparameter optimization. Tuned LightGBM achieved R&sup2; = 0.8851.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Dramatic difference: linear models R&sup2; ~0.17 vs tree ensembles ~0.86. Relationship is highly non-linear. LightGBM selected because gradient boosters improve more with tuning.</p></div>
+<div class="slide-num">14 / 24</div>
+</div>
+
+<!-- SLIDE 15: Final Evaluation -->
+<div class="slide">
+<h2>Final Model Evaluation — LightGBM (Tuned)</h2>
+<div class="kpi-grid">
+<div class="kpi-card" style="background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);"><div class="kpi-val" style="color: var(--info);">0.2328</div><div class="kpi-lbl">MAE</div></div>
+<div class="kpi-card" style="background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%);"><div class="kpi-val" style="color: var(--success);">0.1747</div><div class="kpi-lbl">MSE</div></div>
+<div class="kpi-card" style="background: linear-gradient(135deg, #fff8e1 0%, #fff 100%);"><div class="kpi-val" style="color: var(--warning);">0.4180</div><div class="kpi-lbl">RMSE</div></div>
+<div class="kpi-card" style="background: linear-gradient(135deg, #fce8ec 0%, #fff 100%);"><div class="kpi-val" style="color: var(--highlight);">0.8851</div><div class="kpi-lbl">R&sup2;</div></div>
+</div>
+<div class="two-col" style="margin-top: 20px;">
+<div>
+<h3>Best Hyperparameters</h3>
+<div class="code" style="font-size: 11px;">
+<div>{<span style="color:#ce9178;">'subsample'</span>: <span style="color:#b5cea8;">1.0</span>,</div>
+<div>&nbsp;<span style="color:#ce9178;">'num_leaves'</span>: <span style="color:#b5cea8;">127</span>,</div>
+<div>&nbsp;<span style="color:#ce9178;">'n_estimators'</span>: <span style="color:#b5cea8;">400</span>,</div>
+<div>&nbsp;<span style="color:#ce9178;">'min_child_samples'</span>: <span style="color:#b5cea8;">10</span>,</div>
+<div>&nbsp;<span style="color:#ce9178;">'max_depth'</span>: <span style="color:#b5cea8;">-1</span>,</div>
+<div>&nbsp;<span style="color:#ce9178;">'learning_rate'</span>: <span style="color:#b5cea8;">0.05</span>,</div>
+<div>&nbsp;<span style="color:#ce9178;">'colsample_bytree'</span>: <span style="color:#b5cea8;">0.8</span>}</div>
+</div>
+</div>
+<div>
+<h3>Model Artifacts Saved</h3>
+<ul style="font-size: 13px;">
+<li><strong>encoders.pkl</strong> — Label encoders</li>
+<li><strong>feature_names.pkl</strong> — Feature mapping</li>
+<li><strong>lgbm_model.pkl</strong> — Trained model</li>
+<li><strong>scaler.pkl</strong> — StandardScaler</li>
+<li><strong>uvi_median.pkl</strong> — UVI imputation</li>
+</ul>
+<div class="ok-box" style="margin-top: 10px;">
+<p style="margin:0; font-size: 13px;"><strong>Plots:</strong> Correlation heatmap, model comparison, predicted vs actual, residuals, feature importance, SHAP summary.</p>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Excellent results: R&sup2; 0.8851 explains 88.5% of variance. MAE 0.23 is very low (AQI ranges to 20). 400 estimators with conservative 0.05 learning rate shows well-tuned model.</p></div>
+<div class="slide-num">15 / 24</div>
+</div>
+
+<!-- SLIDE 16: Prediction Demo -->
+<div class="slide">
+<h2>Prediction Demo</h2>
+<p style="margin-bottom: 16px;">The trained model predicts AQI for new cities given weather conditions:</p>
+<div class="two-col">
+<div style="padding: 20px; border: 2px solid var(--danger); border-radius: 10px; background: linear-gradient(135deg, #ffebee 0%, #fff 100%);">
+<div style="font-size: 11px; font-weight: 700; color: var(--danger); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Record #1 — Hazardous</div>
+<div style="font-size: 13px; line-height: 1.9;">
+<div><strong>Country:</strong> DE (Germany)</div>
+<div><strong>City:</strong> Berlin</div>
+<div><strong>Date:</strong> 2023-11-15</div>
+<div><strong>Temperature:</strong> 42.5&deg;C</div>
+<div><strong>Humidity:</strong> 70.0%</div>
+<div><strong>Pressure:</strong> 1015.0 hPa</div>
+<div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid #ddd;">
+<div><strong>Predicted AQI:</strong> <span style="font-size: 18px; font-weight: 700; color: var(--danger);">2.4503</span></div>
+<div><strong>Category:</strong> <span class="tag t-red">Hazardous</span></div>
+</div>
+</div>
+</div>
+<div style="padding: 20px; border: 2px solid var(--warning); border-radius: 10px; background: linear-gradient(135deg, #fff8e1 0%, #fff 100%);">
+<div style="font-size: 11px; font-weight: 700; color: var(--warning); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Record #2 — Polluted</div>
+<div style="font-size: 13px; line-height: 1.9;">
+<div><strong>Country:</strong> PK (Pakistan)</div>
+<div><strong>City:</strong> Lahore</div>
+<div><strong>Date:</strong> 2023-12-20</div>
+<div><strong>Temperature:</strong> 14.0&deg;C</div>
+<div><strong>Humidity:</strong> 88.0%</div>
+<div><strong>Pressure:</strong> 1010.0 hPa</div>
+<div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid #ddd;">
+<div><strong>Predicted AQI:</strong> <span style="font-size: 18px; font-weight: 700; color: var(--warning);">1.5331</span></div>
+<div><strong>Category:</strong> <span class="tag t-orange">Polluted</span></div>
+</div>
+</div>
+</div>
+</div>
+<div class="info-box" style="margin-top: 16px;">
+<p style="margin:0;"><strong>Interpretation:</strong> Berlin's extreme temperature (42.5&deg;C) drives Hazardous prediction, consistent with positive temp-AQI correlation. Lahore's winter high humidity predicts Polluted status.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Demo predictions show model in action. Berlin's extreme temp drives Hazardous — aligns with +0.26 correlation. Lahore in winter with high humidity predicts Polluted. Model outputs numeric AQI and categorical label.</p></div>
+<div class="slide-num">16 / 24</div>
+</div>
+
+<!-- SLIDE 17: Dashboard AQI & Categories -->
+<div class="slide">
+<h2>Power BI Dashboard — AQI & Categories</h2>
+<div class="two-col">
+<div>
+<h3>AQI Page</h3>
+<p>Ranks countries and cities by pollution. Dhaka (Bangladesh) highest, Taiping (Malaysia) lowest.</p>
+<ul style="font-size: 13px;">
+<li><strong>KPIs:</strong> Global avg/max/min AQI; most/least polluted country & city</li>
+<li><strong>Bar Chart:</strong> Average AQI by city</li>
+<li><strong>Pie Chart:</strong> AQI by country (relative share)</li>
+<li><strong>Treemap:</strong> Hierarchical country-city view</li>
+</ul>
+<div class="pink-box" style="margin-top: 10px;">
+<p style="margin:0; font-size: 13px;"><strong>Insight:</strong> Pollution drops sharply after top cities — localized emission sources, not broad regional effects.</p>
+</div>
+</div>
+<div>
+<h3>Categories Page</h3>
+<p>Breaks down readings into Safe / Polluted / Hazardous bands.</p>
+<ul style="font-size: 13px;">
+<li><strong>KPIs:</strong> Total, Safe, Polluted, Hazardous counts</li>
+<li><strong>Donut Chart:</strong> Overall distribution</li>
+<li><strong>Stacked Area:</strong> Monthly trend</li>
+<li><strong>Stacked Bars:</strong> City/country breakdowns</li>
+</ul>
+<div class="ok-box" style="margin-top: 10px;">
+<p style="margin:0; font-size: 13px;"><strong>Distribution:</strong> 66.6% Safe, 22.9% Polluted, 10.6% Hazardous. Hazardous band widens Oct&rarr;Dec.</p>
+</div>
+</div>
+</div>
+<div style="margin-top: 16px; padding: 14px; background: #f8f9fa; border-radius: 8px; text-align: center;">
+<div style="font-size: 12px; color: #888; margin-bottom: 6px;">Dashboard Screenshots</div>
+<div style="font-size: 13px; color: #666;">AQI Page: Dhaka at 12.4 avg AQI (11&times; global avg). Categories: Donut shows 66.55% Safe readings.</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>AQI page answers "where is worst air quality?" Categories answers "how much is safe?" 66.6% Safe is reassuring; 10.6% Hazardous is concerning. Seasonal widening is key.</p></div>
+<div class="slide-num">17 / 24</div>
+</div>
+
+<!-- SLIDE 18: Dashboard Time & Temperature -->
+<div class="slide">
+<h2>Power BI Dashboard — Time & Temperature</h2>
+<div class="two-col">
+<div>
+<h3>Time Page</h3>
+<p>Examines AQI evolution day-by-day, weekdays vs weekends, across seasons.</p>
+<ul style="font-size: 13px;">
+<li><strong>KPIs:</strong> Seasons (2), Months (3), Days (92), Weekday/Weekend split</li>
+<li><strong>Key Dates:</strong> Cleanest (29 Oct), Most polluted (1 Dec)</li>
+<li><strong>Line Chart:</strong> AQI by day</li>
+<li><strong>Bar Charts:</strong> By day-type, month, season</li>
+</ul>
+<div class="info-box" style="margin-top: 10px;">
+<p style="margin:0; font-size: 13px;"><strong>Finding:</strong> Winter AQI (1.17) &gt; Autumn (0.99). Weekday (1.07) vs Weekend (1.02) — marginal difference.</p>
+</div>
+</div>
+<div>
+<h3>Temperature Page</h3>
+<p>Surfaces temperature extremes and relationship with AQI.</p>
+<ul style="font-size: 13px;">
+<li><strong>KPIs:</strong> Avg (11.11&deg;C), Max (49&deg;C), Min (-32.3&deg;C), Range (81.3&deg;C)</li>
+<li><strong>Extremes:</strong> Hottest — Jakarta, Coldest — Krasnoyarsk</li>
+<li><strong>Line Chart:</strong> Temperature trend over Q4</li>
+<li><strong>Scatter:</strong> Temperature vs AQI</li>
+</ul>
+<div class="pink-box" style="margin-top: 10px;">
+<p style="margin:0; font-size: 13px;"><strong>Correlation:</strong> Temperature +0.26 with AQI. Warmer days coincide with modestly higher AQI.</p>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Time page shows clear seasonal pattern — Winter worse than Autumn. Weekday/weekend surprisingly small. Temperature page confirms +0.26 correlation — measurable but not dominant.</p></div>
+<div class="slide-num">18 / 24</div>
+</div>
+
+<!-- SLIDE 19: Dashboard Humidity & Wind/Dew/UVI -->
+<div class="slide">
+<h2>Power BI Dashboard — Humidity & Wind/Dew/UVI</h2>
+<div class="two-col">
+<div>
+<h3>Humidity Page</h3>
+<p>Tracks relative humidity and its relationship with AQI.</p>
+<ul style="font-size: 13px;">
+<li><strong>KPIs:</strong> Avg (76.34%), Max (100.3%), Min (0.2%)</li>
+<li><strong>Extremes:</strong> Most humid — Helsinki, Least — Taiping</li>
+<li><strong>Line Chart:</strong> Humidity trend by day</li>
+<li><strong>Scatter:</strong> Humidity vs AQI</li>
+</ul>
+<div class="ok-box" style="margin-top: 10px;">
+<p style="margin:0; font-size: 13px;"><strong>Correlation:</strong> Humidity -0.20 with AQI. Higher humidity coincides with lower AQI — particulate settling.</p>
+</div>
+</div>
+<div>
+<h3>Wind, Dew & UVI Page</h3>
+<p>Three secondary weather factors in one view.</p>
+<ul style="font-size: 13px;">
+<li><strong>KPIs:</strong> Avg UVI (4.26), Dew (7.71), Wind Gust (9.38)</li>
+<li><strong>Three Scatters:</strong> Dew/UVI/Wind vs AQI</li>
+<li><strong>Grouped Bar:</strong> Country-level comparison</li>
+<li><strong>Line:</strong> Daily trends combined</li>
+</ul>
+<div class="info-box" style="margin-top: 10px;">
+<p style="margin:0; font-size: 13px;"><strong>Finding:</strong> Dew point shows clearest (weak) positive AQI relation. Wind gust shows almost none.</p>
+</div>
+</div>
+</div>
+<div style="margin-top: 16px; padding: 14px; background: #f8f9fa; border-radius: 8px;">
+<h3 style="font-size: 14px; margin-bottom: 8px;">Cross-Page Filtering</h3>
+<p style="margin:0; font-size: 13px;">Every page shares left-hand slicers (Day, Month, Season, City, Country) + topic switcher. Drill from global to single city/day.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Humidity shows opposite correlation to temp — negative. Physically plausible: rain settles particulates. Wind/Dew/UVI: dew matters more than wind. Cross-page filtering is key UX.</p></div>
+<div class="slide-num">19 / 24</div>
+</div>
+
+<!-- SLIDE 20: Key Insights -->
+<div class="slide">
+<h2>Key Insights & Findings</h2>
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+<div style="padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 22px; margin-bottom: 6px;">&#127942;</div>
+<h3>Geographic Concentration</h3>
+<p style="font-size: 13px;">Bangladesh leads with avg AQI <strong>12.36</strong> — 11x global average. Dhaka most polluted city. Pollution concentrated in few cities.</p>
+</div>
+<div style="padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 22px; margin-bottom: 6px;">&#128202;</div>
+<h3>Category Distribution</h3>
+<p style="font-size: 13px;"><strong>61.2%</strong> Safe, <strong>21.0%</strong> Polluted, <strong>9.7%</strong> Hazardous. Majority remain safe.</p>
+</div>
+<div style="padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 22px; margin-bottom: 6px;">&#128197;</div>
+<h3>Seasonal Patterns</h3>
+<p style="font-size: 13px;">Winter AQI (<strong>1.17</strong>) &gt; Autumn (<strong>0.99</strong>). Hazardous band widens Oct-Dec. Weekday vs weekend marginal.</p>
+</div>
+<div style="padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 22px; margin-bottom: 6px;">&#127777;</div>
+<h3>Weather Correlations</h3>
+<p style="font-size: 13px;">Temperature <strong>+0.26</strong>, Humidity <strong>-0.20</strong>. Moderate effects — geography remains primary driver.</p>
+</div>
+</div>
+<div style="margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%); border-radius: 10px; border-left: 3px solid var(--info);">
+<h3 style="font-size: 15px; margin-bottom: 8px;">SMART Questions Answered</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+<div><strong>Q1:</strong> Highest AQI? &rarr; Bangladesh/Dhaka</div>
+<div><strong>Q2:</strong> Proportions? &rarr; 61% Safe, 21% Polluted, 10% Hazardous</div>
+<div><strong>Q3:</strong> Seasonal diff? &rarr; Winter &gt; Autumn</div>
+<div><strong>Q4:</strong> Weather relation? &rarr; Temp (+0.26), Humidity (-0.20)</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Four key insights. Geographic concentration is most striking — Dhaka at 11x global average is alarming. Seasonal pattern important for health planning. Weather correlations scientifically consistent.</p></div>
+<div class="slide-num">20 / 24</div>
+</div>
+
+<!-- SLIDE 21: Challenges -->
+<div class="slide">
+<h2>Challenges Faced & Solutions</h2>
+<div style="display: flex; flex-direction: column; gap: 14px;">
+<div style="display: flex; gap: 16px; padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 44px; height: 44px; border-radius: 50%; background: #ffebee; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">&#9888;</div>
+<div>
+<h3 style="margin-bottom: 4px;">Long-Format Source Data</h3>
+<p style="margin:0; font-size: 13px;">Each city/date had multiple rows (one per species). Reshaping via pivot while preserving valid readings required careful missing combination handling.</p>
+<div style="margin-top: 6px; padding: 6px 10px; background: #e8f5e9; border-radius: 5px; font-size: 12px;"><strong>Solution:</strong> Group-wise forward/backward filling within each city before pivoting.</div>
+</div>
+</div>
+<div style="display: flex; gap: 16px; padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 44px; height: 44px; border-radius: 50%; background: #fff8e1; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">&#128292;</div>
+<div>
+<h3 style="margin-bottom: 4px;">Inconsistent Species Naming</h3>
+<p style="margin:0; font-size: 13px;">Wind gust appeared as wind-gust, wind_gust, windgust. Would silently split into sparse columns, undercounting coverage.</p>
+<div style="margin-top: 6px; padding: 6px 10px; background: #e8f5e9; border-radius: 5px; font-size: 12px;"><strong>Solution:</strong> Dedicated normalization unifies variants before pivoting.</div>
+</div>
+</div>
+<div style="display: flex; gap: 16px; padding: 18px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="width: 44px; height: 44px; border-radius: 50%; background: #e3f2fd; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">&#10067;</div>
+<div>
+<h3 style="margin-bottom: 4px;">Missing vs Invalid Data</h3>
+<p style="margin:0; font-size: 13px;">Missing precipitation = zero (no rain). Missing temperature = estimate from neighbors. Different strategies needed.</p>
+<div style="margin-top: 6px; padding: 6px 10px; background: #e8f5e9; border-radius: 5px; font-size: 12px;"><strong>Solution:</strong> Field-specific imputation, not blanket rules.</div>
+</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Real-world data engineering experience. Long-format issue common in sensor data. Naming inconsistency classic quality problem. Imputation challenge shows domain knowledge.</p></div>
+<div class="slide-num">21 / 24</div>
+</div>
+
+<!-- SLIDE 22: Future -->
+<div class="slide">
+<h2>Limitations & Future Improvements</h2>
+<div class="two-col">
+<div>
+<h3>Current Limitations</h3>
+<div style="padding: 14px; background: #ffebee; border-radius: 8px; margin-bottom: 10px;">
+<ul style="font-size: 13px; margin:0;">
+<li>Single quarter (Q4 2023) — only Autumn/Winter</li>
+<li>8.1% readings labeled "Unknown"</li>
+<li>Pollutant detail dropped after AQI calc</li>
+<li>Manual pipeline execution</li>
+<li>Simple Pearson correlation only</li>
+</ul>
+</div>
+</div>
+<div>
+<h3>Future Improvements</h3>
+<div style="padding: 14px; background: #e8f5e9; border-radius: 8px; margin-bottom: 10px;">
+<ul style="font-size: 13px; margin:0;">
+<li>Extend to full annual cycle</li>
+<li>Retain individual pollutant columns</li>
+<li>Automate with Airflow/cloud scheduler</li>
+<li>Add AQI forecasting layer</li>
+<li>Automated data-quality tests</li>
+<li>Conditional formatting in Power BI</li>
+</ul>
+</div>
+</div>
+</div>
+<div style="margin-top: 14px; padding: 18px; background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%); border-radius: 10px; text-align: center;">
+<h3 style="font-size: 16px; margin-bottom: 10px;">Roadmap Vision</h3>
+<div style="display: flex; justify-content: center; gap: 28px; flex-wrap: wrap;">
+<div style="text-align: center;"><div style="width: 50px; height: 50px; border-radius: 50%; background: var(--info); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 16px;">1</div><div style="font-size: 12px; font-weight: 600;">Automated</div></div>
+<div style="text-align: center;"><div style="width: 50px; height: 50px; border-radius: 50%; background: var(--success); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 16px;">2</div><div style="font-size: 12px; font-weight: 600;">Full Year</div></div>
+<div style="text-align: center;"><div style="width: 50px; height: 50px; border-radius: 50%; background: var(--warning); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 16px;">3</div><div style="font-size: 12px; font-weight: 600;">Forecasting</div></div>
+<div style="text-align: center;"><div style="width: 50px; height: 50px; border-radius: 50%; background: var(--highlight); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 16px;">4</div><div style="font-size: 12px; font-weight: 600;">Real-Time</div></div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Be honest about limitations — shows maturity. Single quarter is biggest gap. Roadmap: manual to automated, descriptive to predictive, batch to real-time.</p></div>
+<div class="slide-num">22 / 24</div>
+</div>
+
+<!-- SLIDE 23: Conclusion -->
+<div class="slide">
+<h2>Conclusion</h2>
+<div style="text-align: center; padding: 10px 30px;">
+<p style="font-size: 16px; color: #444; line-height: 1.7; margin-bottom: 24px;">The Global Air Quality project delivers a <strong>complete analytics pipeline</strong> — from raw WAQI observations through Bronze/Silver/Gold architecture, into a star schema, and finally an interactive Power BI dashboard with ML prediction.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+<div style="text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 32px; font-weight: 700; color: var(--info);">238</div>
+<div style="font-size: 13px; color: #888;">Cities analyzed</div>
+</div>
+<div style="text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 32px; font-weight: 700; color: var(--success);">88.5%</div>
+<div style="font-size: 13px; color: #888;">Model R&sup2; accuracy</div>
+</div>
+<div style="text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+<div style="font-size: 32px; font-weight: 700; color: var(--highlight);">6</div>
+<div style="font-size: 13px; color: #888;">Interactive dashboard pages</div>
+</div>
+</div>
+<div style="padding: 20px; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); border-radius: 10px; color: white; text-align: center;">
+<h3 style="color: white; font-size: 18px; margin-bottom: 10px;">Key Takeaway</h3>
+<p style="font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.6; margin:0;">Air quality is heavily concentrated by geography — few cities account for disproportionate pollution. Seasonal patterns are clear, and weather correlations, while moderate, are scientifically consistent. The project demonstrates the full lifecycle of modern data analytics.</p>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Closing argument. Restate scope and impact. "Air quality concentrated by geography" is the headline. Thank supervisor and team. End with confidence.</p></div>
+<div class="slide-num">23 / 24</div>
+</div>
+
+<!-- SLIDE 24: Thank You -->
+<div class="slide center">
+<div style="padding: 80px 30px;">
+<h1 style="font-size: 52px; margin-bottom: 20px;">Thank You</h1>
+<div class="divider"></div>
+<h2 style="border: none; font-size: 28px; color: #666; font-weight: 400;">Questions & Discussion</h2>
+<div style="margin-top: 50px; font-size: 14px; color: #888;">
+<div style="margin-bottom: 10px;"><strong>Team:</strong> Mohamed Kamel &middot; Omar Fathy &middot; Hasnaa Mohamed &middot; Marwan Emad &middot; Moustafa Khaled</div>
+<div style="margin-bottom: 10px;"><strong>Supervisor:</strong> Engineer Mohamed El Emam</div>
+<div><strong>Program:</strong> GIZ4_DAT1_S4 &middot; July 2026</div>
+</div>
+<div style="margin-top: 36px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+<div style="padding: 10px 20px; background: var(--primary); color: white; border-radius: 6px; font-size: 13px; font-weight: 500;">Data Engineering</div>
+<div style="padding: 10px 20px; background: var(--accent); color: white; border-radius: 6px; font-size: 13px; font-weight: 500;">Dimensional Modeling</div>
+<div style="padding: 10px 20px; background: var(--highlight); color: white; border-radius: 6px; font-size: 13px; font-weight: 500;">Machine Learning</div>
+<div style="padding: 10px 20px; background: var(--info); color: white; border-radius: 6px; font-size: 13px; font-weight: 500;">Power BI Dashboard</div>
+</div>
+</div>
+<div class="notes"><h4>Speaker Notes</h4><p>Thank audience. Open for questions. Be ready to discuss: why LightGBM over Random Forest, how AQI formula chosen, next steps, productionization.</p></div>
+<div class="slide-num">24 / 24</div>
+</div>
+
+</div>
+</body>
+</html>
