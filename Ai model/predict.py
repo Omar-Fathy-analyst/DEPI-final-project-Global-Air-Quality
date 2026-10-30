@@ -1,6 +1,7 @@
 import os
 import sys
 import argparse
+from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
@@ -8,7 +9,9 @@ import pandas as pd
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
 from dashboard import build_dashboard
 
-MODELS_DIR = "models"
+BASE_DIR = Path(__file__).resolve().parent
+MODELS_DIR = BASE_DIR / "models"
+OUTPUTS_DIR = BASE_DIR / "outputs"
 
 
 # ============================================================================
@@ -210,13 +213,14 @@ def main():
     print_results(df_result)
 
     # Save results
-    out_path = "outputs/predictions.csv"
+    OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = OUTPUTS_DIR / "predictions.csv"
     df_result.to_csv(out_path, index=False)
     print(f"\n[PREDICT] ✓ Predictions saved to: {out_path}")
 
     # Build the HTML dashboard and open it in the default browser
     if not args.no_dashboard:
-        dashboard_path = build_dashboard(df_result, out_dir="outputs")
+        dashboard_path = build_dashboard(df_result, out_dir=str(OUTPUTS_DIR))
         print(f"[PREDICT] ✓ Dashboard ready — opening in your browser:")
         print(f"           file://{dashboard_path}\n")
 

@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
-import os
+from pathlib import Path
 from datetime import datetime, timezone
 
-BRONZE_FILE = "bronze_output.csv"
-OUTPUT_FILE = "silver_layer.csv"
+BASE_DIR = Path(__file__).resolve().parent
+BRONZE_FILE = BASE_DIR / "bronze_output.csv"
+OUTPUT_FILE = BASE_DIR / "silver_layer.csv"
 
 NON_NEGATIVE_SPECIES = {
     "pm25", "pm10", "pm1",

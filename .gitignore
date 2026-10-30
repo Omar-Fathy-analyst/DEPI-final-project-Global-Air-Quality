@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments and local configuration
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+
+# Tooling and notebooks
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Logs and generated training metadata
+*.log
+Ai model/catboost_info/
+
+# Local/generated pipeline outputs
+# Keep the committed portfolio artifacts; ignore only newly generated ad-hoc files.
+Medilian&EDA/gold_layer/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
