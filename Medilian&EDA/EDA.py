@@ -17,6 +17,9 @@ Original file is located at
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pathlib import Path
+
+GOLD_DIR = Path(__file__).resolve().parent / "gold_layer"
 
 # Configure visual settings for professional reporting
 sns.set_theme(style="whitegrid")
@@ -24,9 +27,9 @@ plt.rcParams['figure.figsize'] = (12, 6)
 
 print("Initializing Data Load from Gold Layer...")
 try:
-    dim_location = pd.read_csv("dim_location.csv")
-    dim_date = pd.read_csv("dim_date.csv", parse_dates=['date'])
-    fact_table = pd.read_csv("fact_table.csv", parse_dates=['date'])
+    dim_location = pd.read_csv(GOLD_DIR / "dim_location.csv")
+    dim_date = pd.read_csv(GOLD_DIR / "dim_date.csv", parse_dates=['date'])
+    fact_table = pd.read_csv(GOLD_DIR / "fact_airquality_weather.csv", parse_dates=['date'])
 
     # Denormalize tables for EDA
     df = fact_table.merge(dim_location, on='location_key', how='inner') \

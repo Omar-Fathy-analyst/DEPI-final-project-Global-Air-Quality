@@ -1,10 +1,11 @@
 import pandas as pd
-import os
+from pathlib import Path
 from datetime import datetime
 
-SOURCE_FILE = "waqi-covid19-airqualitydata-2023Q4-1.csv"
-OUTPUT_FILE = "bronze_output.csv"
-SOURCE_FILE_NAME = "waqi-covid19-airqualitydata-2023Q4-1.csv"
+BASE_DIR = Path(__file__).resolve().parent
+SOURCE_FILE = BASE_DIR / "waqi-covid19-airqualitydata-2023Q4-1.csv"
+OUTPUT_FILE = BASE_DIR / "bronze_output.csv"
+SOURCE_FILE_NAME = SOURCE_FILE.name
 
 def load_raw_data(filepath: str) -> pd.DataFrame:
     print(f"[BRONZE] Loading raw data from: {filepath}")
@@ -44,9 +45,8 @@ def add_metadata_columns(df: pd.DataFrame, source_file_name: str) -> pd.DataFram
 def save_bronze_output(df: pd.DataFrame, output_path: str) -> None:
     print(f"[BRONZE] Saving bronze output to: {output_path}")
     try:
-        directory = os.path.dirname(output_path)
-        if directory:
-            os.makedirs(directory, exist_ok=True)
+        directory = Path(output_path).parent
+        directory.mkdir(parents=True, exist_ok=True)
         df.to_csv(output_path, index=False, encoding="utf-8")
         file_size_mb = os.path.getsize(output_path) / (1024 * 1024)
         print(f"[BRONZE] ✓ File saved successfully.")

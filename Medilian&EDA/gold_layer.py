@@ -9,11 +9,12 @@ Original file is located at
 
 import pandas as pd
 import numpy as np
-import os
+from pathlib import Path
 
-# المسارات والملفات الموحدة لخطوة الـ Gold
-SILVER_FILE = "silver_layer.csv"
-GOLD_DIR = "gold_layer/"
+# Canonical Gold-layer location and filenames used by both Gold and EDA scripts.
+BASE_DIR = Path(__file__).resolve().parent
+SILVER_FILE = BASE_DIR / "silver_layer.csv"
+GOLD_DIR = BASE_DIR / "gold_layer"
 
 def build_gold_layer():
     print("\n============================================================")
@@ -21,8 +22,7 @@ def build_gold_layer():
     print("============================================================\n")
 
     # إنشاء مجلد الـ Gold إذا لم يكن موجوداً
-    if not os.path.exists(GOLD_DIR):
-        os.makedirs(GOLD_DIR)
+    GOLD_DIR.mkdir(parents=True, exist_ok=True)
 
     print(f"[GOLD] Reading cleaned data from: {SILVER_FILE}")
     try:
@@ -86,9 +86,9 @@ def build_gold_layer():
     # ------------------------------------------------------------
     print("[GOLD] Step 4: Exporting tables to gold directory ...")
 
-    dim_location.to_csv(os.path.join(GOLD_DIR, "dim_location.csv"), index=False, encoding="utf-8")
-    dim_date.to_csv(os.path.join(GOLD_DIR, "dim_date.csv"), index=False, encoding="utf-8")
-    fact_table.to_csv(os.path.join(GOLD_DIR, "fact_airquality_weather.csv"), index=False, encoding="utf-8")
+    dim_location.to_csv(GOLD_DIR / "dim_location.csv", index=False, encoding="utf-8")
+    dim_date.to_csv(GOLD_DIR / "dim_date.csv", index=False, encoding="utf-8")
+    fact_table.to_csv(GOLD_DIR / "fact_airquality_weather.csv", index=False, encoding="utf-8")
 
     print("\n============================================================")
     print("  ✓ GOLD LAYER GENERATION COMPLETED SUCCESSFULLY!")

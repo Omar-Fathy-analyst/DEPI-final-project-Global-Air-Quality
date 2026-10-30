@@ -1,6 +1,7 @@
 import os
 import json
 import warnings
+from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
@@ -23,9 +24,10 @@ from catboost import CatBoostRegressor
 
 warnings.filterwarnings("ignore")
 
-DATA_DIR   = "data"
-MODELS_DIR = "models"
-OUT_DIR    = "outputs"
+BASE_DIR   = Path(__file__).resolve().parent
+DATA_DIR   = BASE_DIR / "data"
+MODELS_DIR = BASE_DIR / "models"
+OUT_DIR    = BASE_DIR / "outputs"
 for d in [DATA_DIR, MODELS_DIR, OUT_DIR]:
     os.makedirs(d, exist_ok=True)
 

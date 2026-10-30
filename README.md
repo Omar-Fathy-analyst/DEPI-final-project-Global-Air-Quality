@@ -1,273 +1,124 @@
-# 🌍 Global Air Quality Prediction System
+# Global Air Quality Analytics
 
-A complete end-to-end Data Engineering and Machine Learning project developed as the **DEPI Graduation Project**. The project follows the **Medallion Architecture (Bronze → Silver → Gold)** to process global air quality data and build a machine learning model capable of predicting the **Air Quality Index (AQI)**.
+An end-to-end data engineering and machine-learning project built for the DEPI graduation project. It processes the WAQI Q4 2023 air-quality dataset through a Bronze → Silver → Gold pipeline, supports exploratory analysis and Power BI reporting, and trains a LightGBM regression model for a project-specific composite air-quality score.
 
----
+## Workflow
 
-## 📌 Project Overview
-
-This project transforms raw air quality data into clean, analytics-ready datasets before training an optimized machine learning model to predict AQI.
-
-The workflow includes:
-
-- Data Ingestion
-- Data Cleaning
-- Data Validation
-- Feature Engineering
-- Exploratory Data Analysis (EDA)
-- Medallion Architecture
-- Machine Learning Model Training
-- AQI Prediction
-- Dashboard Visualization
-
----
-
-## 🏗️ Project Architecture
-
-```
-Raw Data
-    │
-    ▼
-Bronze Layer
-(Data Ingestion)
-    │
-    ▼
-Silver Layer
-(Data Cleaning & Validation)
-    │
-    ▼
-Gold Layer
-(Feature Engineering & Analytics)
-    │
-    ▼
-Machine Learning
-(LightGBM Regression)
-    │
-    ▼
-AQI Prediction Dashboard
+```text
+WAQI raw CSV
+    ↓
+Bronze ingestion → Silver cleaning and feature engineering
+    ↓
+Gold star schema (dimensions + fact table)
+    ├── EDA and Power BI reporting
+    └── ML training → prediction dashboard
 ```
 
----
+> The project calls the target `AQI` for continuity with the original submission. It is a composite score derived from normalized pollutant measurements, not an official regulatory AQI unless the calculation is separately mapped to a recognized standard.
 
-## 📂 Project Structure
+## Repository layout
 
-```
-DEPI Final Discussion/
-
+```text
+.
 ├── Medilian&EDA/
 │   ├── bronze_layer.py
 │   ├── silver_layer.py
 │   ├── gold_layer.py
 │   ├── EDA.py
-│   ├── bronze_pipeline-Colab.ipynb
-│   ├── silver_pipeline-Colab.ipynb
-│   ├── gold_pipeline_Colab.ipynb
+│   ├── waqi-covid19-airqualitydata-2023Q4-1.csv
+│   ├── bronze_output.csv
 │   ├── silver_layer.csv
-│   └── bronze_output.csv
-│
+│   └── gold_layer/                 # generated Gold outputs
 ├── Ai model/
 │   ├── model_training.py
 │   ├── predict.py
-│   ├── src/
-│   │   └── dashboard.py
-│   ├── data/
-│   ├── models/
-│   ├── outputs/
-│   └── README.md
-│
-└── README.md
+│   ├── data/silver_layer.csv
+│   ├── models/                     # committed model artifacts
+│   ├── outputs/                    # charts and dashboard artifacts
+│   └── src/dashboard.py
+├── Power bi/                       # Power BI report and screenshots
+├── Presentation & Documentation/   # project deliverables
+├── Figma/                          # design references
+├── requirements.txt
+└── .gitignore
 ```
 
----
+## Setup
 
-## 🚀 Features
-
-- Medallion Data Architecture
-- Data Cleaning & Validation
-- Missing Value Handling
-- Feature Engineering
-- Exploratory Data Analysis
-- Machine Learning Pipeline
-- Model Comparison
-- Hyperparameter Tuning
-- AQI Prediction
-- Interactive Dashboard
-- Feature Importance Analysis
-- SHAP Explainability
-
----
-
-## 🤖 Machine Learning
-
-Several regression algorithms were evaluated, including:
-
-- Linear Regression
-- Ridge Regression
-- Lasso Regression
-- Decision Tree
-- Random Forest
-- XGBoost
-- CatBoost
-- **LightGBM (Best Model)**
-
-### Best Model
-
-**LightGBM Regressor**
-
-Performance:
-
-- **R² Score:** 0.885
-- **RMSE:** 0.418
-
----
-
-## 📊 Dataset
-
-The project uses the **WAQI COVID-19 Air Quality Dataset (Q4 2023)**.
-
-The dataset contains environmental measurements such as:
-
-- AQI
-- PM2.5
-- PM10
-- O₃
-- NO₂
-- SO₂
-- CO
-- Temperature
-- Humidity
-- Wind Speed
-- Pressure
-- UV Index
-- City
-- Country
-- Date
-
----
-
-## 📈 Project Workflow
-
-1. Load raw dataset
-2. Build Bronze Layer
-3. Clean data into Silver Layer
-4. Generate Gold Layer
-5. Perform EDA
-6. Train ML models
-7. Evaluate models
-8. Save best model
-9. Predict AQI
-10. Display dashboard
-
----
-
-## 🛠️ Technologies Used
-
-### Programming
-
-- Python
-
-### Data Processing
-
-- Pandas
-- NumPy
-
-### Visualization
-
-- Matplotlib
-- Seaborn
-
-### Machine Learning
-
-- Scikit-learn
-- LightGBM
-- XGBoost
-- CatBoost
-
-### Explainability
-
-- SHAP
-
-### Model Persistence
-
-- Joblib
-
----
-
-## ⚙️ Installation
-
-Clone the repository
+Python 3.10 or newer is recommended.
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
+git clone https://github.com/OmarFathy2024/DEPI-final-project-Global-Air-Quality.git
+cd DEPI-final-project-Global-Air-Quality
+python -m venv .venv
+# macOS/Linux
+source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-Move into the project
+## Run the pipeline
+
+All scripts resolve their files relative to their own locations, so these commands work from the repository root or from another current directory.
 
 ```bash
-cd your-repository
+python "Medilian&EDA/bronze_layer.py"
+python "Medilian&EDA/silver_layer.py"
+python "Medilian&EDA/gold_layer.py"
+python "Medilian&EDA/EDA.py"
 ```
 
-Install dependencies
+The Gold script writes the canonical star-schema files to `Medilian&EDA/gold_layer/`:
 
-```bash
-pip install -r requirements.txt
-```
+- `dim_location.csv`
+- `dim_date.csv`
+- `fact_airquality_weather.csv`
 
----
+`EDA.py` reads those exact files. The generated Gold directory is ignored by Git because it is reproducible from the Silver layer.
 
-## ▶️ Running the Project
+## Train and run the model
 
-### 1. Build Data Pipeline
-
-Run the Bronze, Silver, and Gold layer scripts.
-
-### 2. Train the Model
+The model uses the committed Silver dataset at `Ai model/data/silver_layer.csv` and writes artifacts to `Ai model/models/` and `Ai model/outputs/`.
 
 ```bash
 python "Ai model/model_training.py"
+python "Ai model/predict.py" --no-dashboard
 ```
 
-### 3. Predict AQI
+For a custom input CSV:
 
 ```bash
-python "Ai model/predict.py"
+python "Ai model/predict.py" --input path/to/input.csv --no-dashboard
 ```
 
----
+Predictions are saved to `Ai model/outputs/predictions.csv`. Omit `--no-dashboard` to generate the HTML dashboard as well.
 
-## 📊 Outputs
+## Reported model results
 
-The project generates:
+The committed model metadata reports the following historical holdout results:
 
-- Trained LightGBM model
-- Feature Importance
-- Correlation Heatmap
-- SHAP Summary
-- Residual Plot
-- Prediction Results
-- Dashboard
-- CSV Prediction File
+- Model: tuned LightGBM regressor
+- MAE: 0.233
+- RMSE: 0.418
+- R²: 0.885
 
----
+These metrics were produced from the model artifact currently committed to the repository. Retraining may produce different values when dependencies or input data change. The project currently uses a random train/test split; a chronological and location-aware evaluation is a planned improvement.
 
-## 📌 Future Improvements
+## Data and portfolio notes
 
-- Real-time AQI prediction
-- Weather API integration
-- Cloud deployment
-- Docker support
-- CI/CD pipeline
-- Streamlit web application
-- Automated retraining
+The repository includes the original project deliverables, dashboard screenshots, model artifacts, and generated visualizations for portfolio review. Large binary deliverables are retained because they are part of the graduation-project presentation. Do not add credentials, `.env` files, local caches, or untrusted pickle/joblib files.
 
----
+For the original project context and visual deliverables, see `Ai model/README.md`, `Power bi/`, and `Presentation & Documentation/`.
 
-## 👨‍💻 Team
+## Future improvements
 
-Developed as part of the **Digital Egypt Pioneers Initiative (DEPI)** Graduation Project.
+- Add schema and data-quality tests.
+- Add chronological and location-aware model validation.
+- Document the data source, license, and composite AQI formula.
+- Add lightweight GitHub Actions checks.
+- Separate source code, notebooks, data, models, and reports in a later reviewed refactor.
 
----
+## License
 
-## 📄 License
-
-This project is intended for educational purposes.
+This project is intended for educational and portfolio use. Add an explicit license before redistributing the code or data.

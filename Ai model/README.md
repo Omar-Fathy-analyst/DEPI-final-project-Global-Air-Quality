@@ -83,7 +83,7 @@ Expected output:
 python predict.py
 ```
 
-This runs two built-in demo predictions (Berlin & Lahore) and prints results.
+This runs two built-in demo predictions (Aguascalie, Mexico and Lahore, Pakistan) and prints results.
 
 ### Step 5 — Predict from your own CSV
 
@@ -93,7 +93,7 @@ Create a CSV with columns matching Silver Layer format, then:
 python predict.py --input path/to/your_new_data.csv
 ```
 
-Results are saved to `outputs/predictions.csv`.
+Results are saved to `outputs/predictions.csv`. The script resolves `data/`, `models/`, and `outputs/` relative to its own directory, so it can also be started from the repository root with `python "Ai model/predict.py"`.
 
 ---
 
